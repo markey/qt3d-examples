@@ -36,70 +36,70 @@
 
 import bpy
 import os
-from bpy.props import BoolProperty, FloatProperty, StringProperty, EnumProperty
-from bpy_extras.io_utils import ExportHelper, orientation_helper_factory, axis_conversion
+from bpy.props import BoolProperty
+from bpy_extras.io_utils import ExportHelper, orientation_helper, axis_conversion
 from .exporter import Exporter
 
 # Required Blender information.
 bl_info = {
-           "name": "Qt3D Exporter",
-           "author": "Paul Lemire <paul.lemire350@gmail.com>",
-           "version": (0, 1),
-           "blender": (2, 75, 0),
-           "location": "File > Export > Qt3D (.qml)",
-           "description": "Convert a blender project to a Qt3D Application or Qt3D files",
-           "warning": "",
-           "wiki_url": "",
-           "tracker_url": "",
-           "category": "Import-Export"
-          }
+    "name": "Qt3D Exporter",
+    "author": "Paul Lemire <paul.lemire350@gmail.com>",
+    "version": (0, 1),
+    "blender": (2, 80, 0),
+    "location": "File > Export > Qt3D (.qml)",
+    "description": "Convert a blender project to a Qt3D Application or Qt3D files",
+    "warning": "",
+    "wiki_url": "",
+    "tracker_url": "",
+    "category": "Import-Export"
+}
 
-OrientationHelper = orientation_helper_factory(
-    "OrientationHelper", axis_forward="Z", axis_up="Y"
-)
-
-class Qt3DExporter(bpy.types.Operator, ExportHelper, OrientationHelper):
+# OrientationHelper = orientation_helper_factory(
+#     "OrientationHelper", axis_forward="Z", axis_up="Y"
+# )
+@orientation_helper(axis_forward="Z", axis_up="Y")
+class Qt3DExporter(bpy.types.Operator, ExportHelper):
     """Qt3D Exporter"""
-    bl_idname = "export_scene.qt3d_exporter";
-    bl_label = "Qt3DExporter";
-    bl_options = {"PRESET"};
+    bl_idname = "export_scene.qt3d_exporter"
+    bl_label = "Qt3DExporter"
+    bl_options = {"PRESET"}
 
     filename_ext = ""
     use_filter_folder = True
 
     # We set up exporter UI here
 
-    use_mesh_modifiers = BoolProperty(
+    use_mesh_modifiers: BoolProperty(
         name="Apply Modifiers",
         description="Apply modifiers (preview resolution)",
         default=True,
     )
 
-    use_selection_only = BoolProperty(
+    use_selection_only: BoolProperty(
         name="Selection Only",
         description="Only export selected objects",
         default=False,
     )
 
-    use_visible_only = BoolProperty(
+    use_visible_only: BoolProperty(
         name="Visible Only",
         description="Only export visible objects",
         default=False,
     )
 
-    use_mesh_collection = BoolProperty(
+    use_mesh_collection: BoolProperty(
         name="Use Mesh Collection",
         description="Group all Qt3D Meshes into a single file",
         default=True,
     )
 
-    use_material_collection = BoolProperty(
+    use_material_collection: BoolProperty(
         name="Use Material Collection",
         description="Group all Qt3D Materials into a single file",
         default=True,
     )
 
-    export_full_qt3d_app = BoolProperty(
+    export_full_qt3d_app: BoolProperty(
         name="Export as Qt3D Application",
         description="Creates a full Qt3D application",
         default=True,
@@ -113,26 +113,26 @@ class Qt3DExporter(bpy.types.Operator, ExportHelper, OrientationHelper):
         self.properties.filepath = ""
 
         col = layout.box().column(align=True)
-        col.label("Global", icon="QUESTION")
+        col.label(text="Global", icon="QUESTION")
         col.prop(self, "export_full_qt3d_app")
 
         col = layout.box().column(align=True)
-        col.label("Axis Conversion", icon="MANIPUL")
+        col.label(text="Axis Conversion", icon="HAND")
         col.prop(self, "axis_up")
         col.prop(self, "axis_forward")
 
         col = layout.box().column(align=True)
-        col.label("Nodes", icon="OBJECT_DATA")
+        col.label(text="Nodes", icon="OBJECT_DATA")
         col.prop(self, "use_selection_only")
         col.prop(self, "use_visible_only")
 
         col = layout.box().column(align=True)
-        col.label("Meshes", icon="MESH_DATA")
+        col.label(text="Meshes", icon="MESH_DATA")
         col.prop(self, "use_mesh_modifiers")
         col.prop(self, "use_mesh_collection")
 
         col = layout.box().column(align=True)
-        col.label("Material", icon="MATERIAL_DATA")
+        col.label(text="Material", icon="MATERIAL_DATA")
         col.prop(self, "use_material_collection")
 
     def execute(self, context):
@@ -154,7 +154,6 @@ class Qt3DExporter(bpy.types.Operator, ExportHelper, OrientationHelper):
             self.userpath = os.path.dirname(self.userpath)
             msg = "Selecting directory: " + self.userpath
             self.report({"INFO"}, msg)
-
 
         # switch to work dir and create directories
         os.chdir(self.userpath)
@@ -204,13 +203,12 @@ def createBlenderMenu(self, context):
 # Register against Blender
 def register():
     bpy.utils.register_class(Qt3DExporter)
-    bpy.types.INFO_MT_file_export.append(createBlenderMenu)
+    bpy.types.TOPBAR_MT_file_export.append(createBlenderMenu)
 
 
 def unregister():
     bpy.utils.unregister_class(Qt3DExporter)
-    bpy.types.INFO_MT_file_export.remove(createBlenderMenu)
-
+    bpy.types.TOPBAR_MT_file_export.remove(createBlenderMenu)
 
 # Handle running the script from Blender"s text editor.
 if (__name__ == "__main__"):
