@@ -68,7 +68,7 @@ class MeshCollection(object):
                     # Mesh has no modifiers
                     blenderMeshes[blenderMesh.name] = blenderMesh
         else:
-            blenderMeshes = {blenderMesh.name : blenderMesh for blenderMesh in originalMeshes}
+            blenderMeshes = {blenderMesh.name: blenderMesh for blenderMesh in originalMeshes}
 
         self.meshes = [Mesh(blenderMeshName, blenderMesh) for blenderMeshName, blenderMesh in blenderMeshes.items()]
         self.meshCollectionContent = ("import Qt3D.Core 2.9\n"
@@ -109,13 +109,13 @@ class Mesh(object):
         # * indices of vertex into the mesh vertices array
         # * index of Material to be used for the mesh
 
-        print("Creating GeometryRenderers for ",  self.blenderMesh.name)
+        print("Creating GeometryRenderers for ", self.blenderMesh.name)
 
         # Convert Mesh to triangulated faces and build buffer
 
         # Triangulate blenderMesh
         self.blenderMesh.calc_normals_split()
-        self.blenderMesh.calc_tessface()
+        self.blenderMesh.calc_loop_triangles()
 
         # Retrieve vertices from mesh (use dictionary hashing to remove duplicates)
         self.vertices = {Vertex(mesh, loop): 0 for loop in self.blenderMesh.loops}.keys()

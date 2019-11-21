@@ -307,7 +307,7 @@ class Material(object):
             pass
 
         self._content = ("    readonly property Material " + self._materialPropertyName + ": PhongMaterial {\n"
-                         "        ambient: " + blenderColorToQColor([blenderMaterial.ambient * 0.2 for i in range(0, 3)]) + "\n"
+                         "        ambient: " + blenderColorToQColor([0.5 * 0.2 for i in range(0, 3)]) + "\n"  # FIXME Material.ambient does not exist in 2.8
                          "        diffuse: " + blenderColorToQColor(blenderMaterial.diffuse_color) + "\n"
                          "        specular: " + blenderColorToQColor(blenderMaterial.specular_color) + "\n"
                          "    }\n")

@@ -294,7 +294,7 @@ class Exporter(object):
         camera = node.bObject.data
         location = node.bObject.matrix_local.to_translation()
         # direction = node.bObject.matrix_local.to_quaternion() * mathutils.Vector((0.0, 0.0, -1.0))
-        up = node.bObject.matrix_local.to_quaternion() * mathutils.Vector((0.0, 1.0, 0.0))
+        up = node.bObject.matrix_local.to_quaternion() @ mathutils.Vector((0.0, 1.0, 0.0))
         aspectRatio = (self.scene.render.resolution_x * self.scene.render.pixel_aspect_x) / (self.scene.render.resolution_y * self.scene.render.pixel_aspect_y)
 
         projectionTypes = {
