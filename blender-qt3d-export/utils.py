@@ -62,5 +62,8 @@ def matrix4x4FromBMatrix(bMatrix):
 def blenderColorToQColor(color):
     return "Qt.rgba(" + ", ".join([str(comp) for comp in color]) + ", 1.0)";
 
+def blenderColorToQColor_noalpha(color):
+    return "Qt.rgba(" + ", ".join([str(comp) for comp in color]) + ")";
+
 def blender3DVectorToQVector3D(vector):
     return "Qt.vector3d(" + ", ".join([str(comp) for comp in vector]) + ")";

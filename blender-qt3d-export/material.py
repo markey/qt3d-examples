@@ -37,8 +37,7 @@
 import bpy
 import gpu
 import os
-from .utils import propertyName, blenderColorToQColor
-
+from .utils import propertyName, blenderColorToQColor, blenderColorToQColor_noalpha
 
 def uniformInt1(value):
     pass
@@ -307,8 +306,9 @@ class Material(object):
             pass
 
         self._content = ("    readonly property Material " + self._materialPropertyName + ": PhongMaterial {\n"
-                         "        ambient: " + blenderColorToQColor([0.5 * 0.2 for i in range(0, 3)]) + "\n"  # FIXME Material.ambient does not exist in 2.8
-                         "        diffuse: " + blenderColorToQColor(blenderMaterial.diffuse_color) + "\n"
+                        #  "        ambient: " + blenderColorToQColor([blenderMaterial.ambient * 0.2 for i in range(0, 3)]) + "\n"  # FIXME Material.ambient does not exist in 2.8
+                         "        ambient: " + blenderColorToQColor([1.0, 1.0, 1.0]) + "\n"
+                         "        diffuse: " + blenderColorToQColor_noalpha(blenderMaterial.diffuse_color) + "\n"
                          "        specular: " + blenderColorToQColor(blenderMaterial.specular_color) + "\n"
                          "    }\n")
 

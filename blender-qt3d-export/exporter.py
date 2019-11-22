@@ -41,7 +41,7 @@ import math
 from .material import MaterialCollection
 from .mesh import MeshCollection, Mesh, SubMesh
 from .node import Node
-from .utils import propertyName, qmlFileName, localMatrix4x4FromBObject, matrix4x4FromBMatrix, blenderColorToQColor, blender3DVectorToQVector3D
+from .utils import propertyName, qmlFileName, localMatrix4x4FromBObject, matrix4x4FromBMatrix, blenderColorToQColor, blenderColorToQColor_noalpha, blender3DVectorToQVector3D
 
 class Exporter(object):
 
