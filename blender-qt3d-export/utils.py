@@ -41,16 +41,22 @@ def cleanString(s):
     for i, j in { ")": "_",
                   "(": "_",
                   ".": "_",
-                  " ": "_" }.items():
+                  "-": "_",
+                  " ": "_",
+                  "__": "_" }.items():
         s = s.replace(i, j)
     return s
 
 def propertyName(str):
+    str = "x_" + str;
     return "".join([entry[0].upper() + entry[1:].lower() if i > 0 and len(entry) > 1 else entry.lower() for i, entry in enumerate(cleanString(str).split("_"))])
 
 def qmlFileName(str):
     if str.lower() == "camera":
         str = "blenderCamera"
+    if str.lower() == "light":
+        str = "blenderLight"
+    str = "x_" + str;
     return "".join([entry[0].upper() + entry[1:].lower() for entry in cleanString(str).split("_")])
 
 def localMatrix4x4FromBObject(bObject):

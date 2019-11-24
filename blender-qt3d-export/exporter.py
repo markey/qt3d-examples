@@ -267,7 +267,7 @@ class Exporter(object):
                    "    ]\n\n"
                    "    OrbitCameraController\n"
                    "    {\n"
-                   "        camera: camera\n"
+                   "        camera: " + propertyName(self.scene.camera.name) + "\n"
                    "    }\n\n")
 
         # Instantiate Mesh and Material collections if required
