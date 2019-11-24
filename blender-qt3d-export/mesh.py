@@ -60,7 +60,8 @@ class MeshCollection(object):
                     modifiedMesh = blenderMesh
                     # Apply all modifiers
                     for modifier in modifiersForMesh:
-                        modifiedMesh = modifier.to_mesh(bpy.context.scene, True, "PREVIEW")
+                        depsgraph = bpy.context.evaluated_depsgraph_get()
+                        modifiedMesh = modifier.evaluated_get(depsgraph).to_mesh()
                         modifiersForMesh = [obj for obj in modifiersObject if obj.data == modifiedMesh]
                     # Save origin mesh name and reference modified mesh
                     blenderMeshes[blenderMesh.name] = modifiedMesh
