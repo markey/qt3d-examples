@@ -91,27 +91,27 @@ def uniformDynamicObjectColor(uniform):
     pass
 
 
-def uniformDynamicLampDynVec(uniform):
+def uniformDynamicLightDynVec(uniform):
     pass
 
 
-def uniformDynamicLampDynCo(uniform):
+def uniformDynamicLightDynCo(uniform):
     pass
 
 
-def uniformDynamicLampDynIMat(uniform):
+def uniformDynamicLightDynIMat(uniform):
     pass
 
 
-def uniformDynamicLampPersMat(uniform):
+def uniformDynamicLightDynPersMat(uniform):
     pass
 
 
-def uniformDynamicLampDynEnergy(uniform):
+def uniformDynamicLightDynEnergy(uniform):
     pass
 
 
-def uniformDynamicLampDynCol(uniform):
+def uniformDynamicLightDynCol(uniform):
     pass
 
 
@@ -132,7 +132,7 @@ def uniformDynamicObjectAutoBumpScale(uniform):
 
 
 def parameterUniformValue(uniform):
-    # Uniform is either a texture or a lamp property
+    # Uniform is either a texture or a light property
     uniform_data_type = {
         gpu.GPU_DATA_1I: uniformInt1,
         gpu.GPU_DATA_1F: uniformFloat1,
@@ -150,12 +150,12 @@ def parameterUniformValue(uniform):
         gpu.GPU_DYNAMIC_OBJECT_VIEWIMAT: uniformDynamicObjViewIMat,
         gpu.GPU_DYNAMIC_OBJECT_IMAT: uniformDynamicObjIMat,
         gpu.GPU_DYNAMIC_OBJECT_COLOR: uniformDynamicObjectColor,
-        gpu.GPU_DYNAMIC_LAMP_DYNVEC: uniformDynamicLampDynVec,
-        gpu.GPU_DYNAMIC_LAMP_DYNCO: uniformDynamicLampDynCo,
-        gpu.GPU_DYNAMIC_LAMP_DYNIMAT: uniformDynamicLampDynIMat,
-        gpu.GPU_DYNAMIC_LAMP_DYNPERSMAT: uniformDynamicLampPersMat,
-        gpu.GPU_DYNAMIC_LAMP_DYNENERGY: uniformDynamicLampDynEnergy,
-        gpu.GPU_DYNAMIC_LAMP_DYNCOL: uniformDynamicLampDynCol,
+        gpu.GPU_DYNAMIC_LIGHT_DYNVEC: uniformDynamicLightDynVec,
+        gpu.GPU_DYNAMIC_LIGHT_DYNCO: uniformDynamicLightDynCo,
+        gpu.GPU_DYNAMIC_LIGHT_DYNIMAT: uniformDynamicLightDynIMat,
+        gpu.GPU_DYNAMIC_LIGHT_DYNPERSMAT: uniformDynamicLightDynPersMat,
+        gpu.GPU_DYNAMIC_LIGHT_DYNENERGY: uniformDynamicLightDynEnergy,
+        gpu.GPU_DYNAMIC_LIGHT_DYNCOL: uniformDynamicLightDynCol,
         gpu.GPU_DYNAMIC_SAMPLER_2DBUFFER: uniformDynamicSampler2DBuffer,
         gpu.GPU_DYNAMIC_SAMPLER_2DIMAGE: uniformDynamicSampler2DImage,
         gpu.GPU_DYNAMIC_SAMPLER_2DSHADOW: uniformDynamicSampler2DShadow,

@@ -51,7 +51,7 @@ class Exporter(object):
         self.qmlGenerators = {
             "MESH": self.generateQMLFileForMesh,
             "CAMERA": self.generateQMLFileForCamera,
-            "LAMP": self.generateQMLFileForLamp,
+            "LIGHT": self.generateQMLFileForLight,
         }
 
     def export(self):
@@ -213,36 +213,36 @@ class Exporter(object):
 
         return content
 
-    def generateQMLFileForLamp(self, node):
-        lamp = node.bObject.data
-        print("Lamp " + str(lamp) + " " + str(lamp.type))
+    def generateQMLFileForLight(self, node):
+        light = node.bObject.data
+        print("Light " + str(light) + " " + str(light.type))
 
-        lampComponentNameFromType = {"POINT": "PointLight",
+        lightComponentNameFromType = {"POINT": "PointLight",
                                      "SUN": "DirectionalLight",
                                      "SPOT": "SpotLight", }
-        if str(lamp.type) in lampComponentNameFromType:
-            print("Generating Lamp")
+        if str(light.type) in lightComponentNameFromType:
+            print("Generating Light")
             content = ("Entity {\n"
                        "    id: root\n\n"
                        "    components: [\n"
                        "        Transform {\n" +
                        "            matrix: " + localMatrix4x4FromBObject(node.bObject) + "\n"
                        "        },\n"
-                       "        " + lampComponentNameFromType[lamp.type] + "{\n"
-                       "            color:" + blenderColorToQColor(lamp.color) + "\n"
-                       "            intensity: " + str(lamp.energy) + "\n")
+                       "        " + lightComponentNameFromType[light.type] + "{\n"
+                       "            color:" + blenderColorToQColor(light.color) + "\n"
+                       "            intensity: " + str(light.energy) + "\n")
 
-            if lamp.type == "SPOT":
-                content += ("            cutOffAngle: " + str(math.degrees(lamp.spot_size)) + "\n"
-                            "            constantAttenuation: " + str(lamp.constant_coefficient) + "\n"
-                            "            linearAttenuation: " + str(lamp.linear_attenuation) + "\n"
-                            "            quadraticAttenuation: " + str(lamp.quadratic_attenuation) + "\n"
+            if light.type == "SPOT":
+                content += ("            cutOffAngle: " + str(math.degrees(light.spot_size)) + "\n"
+                            "            constantAttenuation: " + str(light.constant_coefficient) + "\n"
+                            "            linearAttenuation: " + str(light.linear_attenuation) + "\n"
+                            "            quadraticAttenuation: " + str(light.quadratic_attenuation) + "\n"
                             "            localDirection: " + blender3DVectorToQVector3D(mathutils.Vector(0, 0, -1) * node.bObject.matrix_local) + "\n")
-            elif lamp.type == "POINT":
-                content += ("            constantAttenuation: " + str(lamp.constant_coefficient) + "\n"
-                            "            linearAttenuation: " + str(lamp.linear_attenuation) + "\n"
-                            "            quadraticAttenuation: " + str(lamp.quadratic_attenuation) + "\n")
-            elif lamp.type == "SUN":
+            elif light.type == "POINT":
+                content += ("            constantAttenuation: " + str(light.constant_coefficient) + "\n"
+                            "            linearAttenuation: " + str(light.linear_attenuation) + "\n"
+                            "            quadraticAttenuation: " + str(light.quadratic_attenuation) + "\n")
+            elif light.type == "SUN":
                 content += ("            worldDirection: " + blender3DVectorToQVector3D(mathutils.Vector(0, 0, -1) * node.bObject.matrix_world) + "\n")
 
             content += ("        }\n"
