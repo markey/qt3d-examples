@@ -44,7 +44,7 @@ from .exporter import Exporter
 bl_info = {
     "name": "Qt3D Exporter",
     "author": "Paul Lemire <paul.lemire350@gmail.com>",
-    "version": (0, 1),
+    "version": (0, 2),
     "blender": (2, 80, 0),
     "location": "File > Export > Qt3D (.qml)",
     "description": "Convert a blender project to a Qt3D Application or Qt3D files",
