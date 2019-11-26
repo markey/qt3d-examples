@@ -37,7 +37,7 @@
 import bpy
 import os
 from array import array
-from .utils import propertyName, cleanString
+from .utils import AddonSettings, propertyName, cleanString
 
 class MeshCollection(object):
     def __init__(self, applyModifiers=True):
@@ -277,11 +277,19 @@ class Vertex:
 
 class Buffer(object):
     def __init__(self, vertexBufferName, verticesFileName):
-        self._content = ("    Buffer {\n"
-                         "        id: " + vertexBufferName + "\n"
-                         "        type: Buffer.VertexBuffer\n"
-                         "        data: readBinaryFile(\"qrc:/" + verticesFileName + "\")\n"
-                         "    }\n")
+
+        if AddonSettings.settings["use_resource_system"]:
+            self._content = ("    Buffer {\n"
+                            "        id: " + vertexBufferName + "\n"
+                            "        type: Buffer.VertexBuffer\n"
+                            "        data: readBinaryFile(\"qrc:/" + verticesFileName + "\")\n"
+                            "    }\n")
+        else:
+            self._content = ("    Buffer {\n"
+                            "        id: " + vertexBufferName + "\n"
+                            "        type: Buffer.VertexBuffer\n"
+                            "        data: readBinaryFile(Qt.resolvedUrl(\"../" + verticesFileName + "\"))\n"
+                            "    }\n")
 
     @property
     def content(self):

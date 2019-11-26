@@ -37,6 +37,16 @@
 import bpy
 import os
 
+class AddonSettings:
+
+    @property
+    def settings(self):
+        return self._settings 
+
+    @settings.setter
+    def settings(self, val):
+        self._settings = val;        
+
 def cleanString(s):
     for i, j in { ")": "_",
                   "(": "_",

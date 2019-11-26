@@ -38,6 +38,7 @@ import bpy
 import os
 from bpy.props import BoolProperty
 from bpy_extras.io_utils import ExportHelper, orientation_helper, axis_conversion
+from .utils import AddonSettings
 from .exporter import Exporter
 
 # Required Blender information.
@@ -105,6 +106,12 @@ class Qt3DExporter(bpy.types.Operator, ExportHelper):
         default=True,
     )
 
+    use_resource_system: BoolProperty(
+        name="Use Qt Resource System",
+        description="Stores QML and binary files in Qt resources",
+        default=True,
+    )
+
     def __init__(self):
         pass
 
@@ -115,6 +122,7 @@ class Qt3DExporter(bpy.types.Operator, ExportHelper):
         col = layout.box().column(align=True)
         col.label(text="Global", icon="QUESTION")
         col.prop(self, "export_full_qt3d_app")
+        col.prop(self, "use_resource_system")
 
         col = layout.box().column(align=True)
         col.label(text="Axis Conversion", icon="HAND")
@@ -138,8 +146,8 @@ class Qt3DExporter(bpy.types.Operator, ExportHelper):
     def execute(self, context):
         print("In Execute" + bpy.context.scene.name)
 
-        exportSettings = self.as_keywords()
-        exportSettings["global_matrix"] = axis_conversion(to_forward=self.axis_forward, to_up=self.axis_up).to_4x4()
+        AddonSettings.settings = self.as_keywords()
+        AddonSettings.settings["global_matrix"] = axis_conversion(to_forward=self.axis_forward, to_up=self.axis_up).to_4x4()
 
         self.binaryDirectoryName = "assets/binaries/"
         self.shadersDirectoryName = "assets/shaders/"
@@ -170,7 +178,7 @@ class Qt3DExporter(bpy.types.Operator, ExportHelper):
         # Save scene into scene
         scene = bpy.context.scene
 
-        exporter = Exporter(scene, exportSettings)
+        exporter = Exporter(scene, AddonSettings.settings)
         exporter.export()
 
         bpy.context.window_manager.progress_update(50)
@@ -183,7 +191,7 @@ class Qt3DExporter(bpy.types.Operator, ExportHelper):
         exporter.generateQRCFiles()
         bpy.context.window_manager.progress_update(80)
 
-        if exportSettings["export_full_qt3d_app"]:
+        if AddonSettings.settings["export_full_qt3d_app"]:
             # Create main.cpp
             exporter.generateMainCppFile()
             bpy.context.window_manager.progress_update(90)
