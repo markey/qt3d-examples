@@ -196,10 +196,11 @@ class Exporter(object):
             print("Material Name for Submesh is: " + materialName)
             offset = 4 if nestedMeshes else 0
             if nestedMeshes:
-                content += "   Entity {\n"
+                content += "   Entity {\n" + "        objectName: \"" + node.bObject.name + "\"\n"
 
             qt3dMaterialProperty = (((self.materialCollectionInfo["id"] + ".") if self.settings["use_material_collection"] else "") + materialName) if len(materialName) > 0 else "PhongMaterial {}"
 
+            # TODO Make Object Picking an optional feature
             content += (" " * offset +
                         "    readonly property Material material: " + qt3dMaterialProperty + "\n" +
                         " " * offset +
@@ -207,7 +208,13 @@ class Exporter(object):
                         " " * offset +
                         "    readonly property GeometryRenderer geometryRenderer: " + ((self.meshCollectionInfo["id"] + ".") if self.settings["use_mesh_collection"] else "") + meshPropertyName + materialName + "\n" +
                         " " * offset +
-                        "    components: [transform, material, geometryRenderer]\n")
+                        "    readonly property ObjectPicker picker:\n\n" +
+                        "    ObjectPicker {\n" +
+                        "       hoverEnabled: true\n" +
+                        "       dragEnabled: true\n\n" +
+                        "       onClicked: mainRoot.entityPicked(parent, pick);\n" +
+                        "    }\n\n" +
+                        "    components: [transform, material, geometryRenderer, picker]\n")
             if nestedMeshes:
                 content += " " * offset + "}\n\n"
 
@@ -254,6 +261,8 @@ class Exporter(object):
         # FrameGraph and Render/Input Settings
         content = ("Entity {\n"
                    "    id: mainRoot\n\n"
+                   "    // Signal triggered when an entity was clicked (picked)\n" 
+                   "    signal entityPicked(var entity, var pick)\n\n"
                    "    components: [\n"
                    "       RenderSettings {\n"
                    "           activeFrameGraph: ForwardRenderer {\n"
@@ -261,6 +270,9 @@ class Exporter(object):
                    "               camera: " + propertyName(self.scene.camera.name) + "\n"
                    "               frustumCulling: false\n"
                    "           }\n"
+                   "           pickingSettings.pickMethod: PickingSettings.PrimitivePicking;\n"
+                   "           pickingSettings.pickResultMode: PickingSettings.NearestPick;\n"
+                   "           pickingSettings.faceOrientationPickingMode: PickingSettings.FrontFace;\n"
                    "       },\n"
                    "       // Event Source will be set by the Qt3DQuickWindow\n"
                    "       InputSettings { }\n"
